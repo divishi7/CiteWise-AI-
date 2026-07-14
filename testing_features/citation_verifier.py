@@ -1,3 +1,9 @@
+import re
+from sentence_transformers import CrossEncoder
+
+nli_model = CrossEncoder("cross-encoder/nli-deberta-v3-base")
+LABELS = ["contradiction", "entailment", "neutral"]
+
 #to verify claims
 def verify_claim(chunk, claim):
     """Check if `chunk` supports `claim`. Returns entailment/contradiction/neutral + confidence."""
