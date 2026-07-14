@@ -25,3 +25,9 @@ def verify_answer(chunks, answer_text):
                 best_result = result
         results.append(best_result)
     return results
+
+def verify_answer_with_threshold(chunks, answer_text, min_confidence=0.6):
+    results = verify_answer(chunks, answer_text)
+    for r in results:
+        r["reliable"] = r["confidence"] >= min_confidence
+    return results
