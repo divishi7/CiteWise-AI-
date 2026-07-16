@@ -10,3 +10,5 @@ wheels/
 .venv
 #chromadb
 chroma_db/
+#gemini key
+.env

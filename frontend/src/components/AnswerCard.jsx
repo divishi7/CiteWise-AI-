@@ -1,15 +1,9 @@
 import "./AnswerCard.css";
 import { useState } from "react";
 
-function AnswerCard() {
-
+function AnswerCard({ answer }) {
   const [copied, setCopied] = useState(false);
 
-  const answer = `Large Language Models (LLMs) are advanced AI systems trained on massive datasets to understand and generate human language.
-
-They use Transformer-based architectures to process context, summarize information, answer questions, and assist researchers in understanding complex documents.
-
-According to the uploaded research paper, these models improve productivity by enabling semantic search, intelligent summarization, and citation-backed responses.`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(answer);

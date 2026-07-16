@@ -1,5 +1,6 @@
 import "./UploadCard.css";
 import { useState } from "react";
+const API_URL = "http://127.0.0.1:8000";
 
 function UploadCard() {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -13,13 +14,25 @@ function UploadCard() {
         if (file && file.type === "application/pdf") {
             setSelectedFile(file);
 
-            setUploading(true);
-            setUploaded(false);
+           setUploading(true);
+           setUploaded(false);
 
-            setTimeout(() => {
-                setUploading(false);
-                setUploaded(true);
-            }, 2500);
+           const formData = new FormData();
+           formData.append("file", file);
+
+           fetch(`${API_URL}/upload`, {
+            method: "POST",
+            body: formData,
+           })
+           .then((response) => response.json())
+           .then((data) => {
+            setUploading(false);
+            setUploaded(true);
+           })
+           .catch((error) => {
+            console.error(error);
+            setUploading(false);
+           });
         }
     };
 
@@ -44,10 +57,22 @@ function UploadCard() {
             setUploading(true);
             setUploaded(false);
 
-            setTimeout(() => {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch(`${API_URL}/upload`, {
+                method: "POST",
+                body: formData,
+            })
+            .then((response) => response.json())
+            .then((data) => {
                 setUploading(false);
                 setUploaded(true);
-            }, 2500);
+            })
+            .catch((error) => {
+                console.error(error);
+                setUploading(false);
+            });
         }
     };
 
