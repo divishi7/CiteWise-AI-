@@ -1,0 +1,141 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+}
+
+/* ---------- HOME ---------- */
+
+.home{
+    padding:30px 40px 40px;
+    text-align:center;
+}
+
+.home h1{
+    font-size:56px;
+    font-weight:800;
+    color:#1e3a8a;
+    letter-spacing:1px;
+    margin-bottom:8px;
+}
+.hero-heading{
+    font-size:26px;
+    font-weight:600;
+    color:#4b5563;
+    margin-bottom:18px;
+}
+
+.home h3 {
+    color: #555;
+}
+
+.home p{
+
+    color:#5b6475;
+
+    font-size:19px;
+
+    line-height:1.8;
+}
+.hero-subtitle{
+    max-width:760px;
+    margin:0 auto 30px auto;
+    color:#6b7280;
+    font-size:20px;
+    line-height:1.8;
+}
+.hero-badges{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-bottom:55px;
+}
+.hero-badges span{
+
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    padding:12px 22px;
+
+    border-radius:30px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#374151;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.06);
+
+    transition:.3s;
+}
+
+.hero-badges span:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 22px rgba(0,0,0,.10);
+
+}
+
+/* ---------- TOP SECTION ---------- */
+
+.top-section {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 24px;
+    margin: 25px auto;
+    max-width: 1400px;
+    flex-wrap: wrap;
+}
+
+/* ---------- BUTTON ---------- */
+
+button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+/* ---------- NAVBAR ---------- */
+
+.navbar {
+    background: #1e3a8a;
+    color: white;
+    padding: 18px 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+}
+
+.logo{
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:0.3px;
+}
+
+.tagline{
+    font-size:16px;
+    font-weight:500;
+
+    background:rgba(255,255,255,0.12);
+
+    padding:8px 16px;
+
+    border-radius:30px;
+}
