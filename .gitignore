@@ -8,3 +8,23 @@ wheels/
 
 # Virtual environments
 .venv
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+
+# Chroma database
+data/chroma_db/
+
+# Processed files
+data/processed/
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+data/raw_pdfs/
