@@ -1,11 +1,12 @@
 from pathlib import Path
 
-from loader import PDFLoader
-from cleaner import TextCleaner
-from splitter import DocumentSplitter
-from embeddings import EmbeddingGenerator
-from vectorstore import VectorStore
-from retriever import Retriever
+from rag.logger import logger
+from rag.loader import PDFLoader
+from rag.cleaner import TextCleaner
+from rag.splitter import DocumentSplitter
+from rag.embeddings import EmbeddingGenerator
+from rag.vectorstore import VectorStore
+from rag.retriever import Retriever
 
 
 if __name__ == "__main__":
@@ -28,7 +29,6 @@ if __name__ == "__main__":
     # ---------------------------------------------------
 
     pdf_folder = Path("data/raw_pdfs")
-
     pdf_files = list(pdf_folder.glob("*.pdf"))
 
     if not pdf_files:
@@ -46,51 +46,78 @@ if __name__ == "__main__":
         print(f"Processing: {pdf_file.name}")
         print("=" * 70)
 
-        # STEP 1 : LOAD
+        try:
 
-        print("[1] Loading PDF...")
+            # ---------------------------
+            # STEP 1 : LOAD
+            # ---------------------------
 
-        loader = PDFLoader(pdf_file)
+            logger.info(f"[1] Loading {pdf_file.name}")
 
-        document = loader.load()
+            loader = PDFLoader(pdf_file)
 
-        print(f"Loaded: {document['source']}")
+            document = loader.load()
 
-        # STEP 2 : CLEAN
+            logger.info(f"Loaded: {document['source']}")
 
-        print("[2] Cleaning Pages...")
+            # ---------------------------
+            # STEP 2 : CLEAN
+            # ---------------------------
 
-        cleaned_pages = cleaner.clean(document["pages"])
+            logger.info(f"Cleaning {document['source']}")
 
-        print(f"Pages Cleaned : {len(cleaned_pages)}")
+            cleaned_pages = cleaner.clean(document["pages"])
 
-        # STEP 3 : SPLIT
+            logger.info(f"Pages Cleaned : {len(cleaned_pages)}")
 
-        print("[3] Splitting Document...")
+            # ---------------------------
+            # STEP 3 : SPLIT
+            # ---------------------------
 
-        chunks = splitter.split(cleaned_pages)
+            logger.info("[3] Splitting Document...")
 
-        print(f"Chunks Created : {len(chunks)}")
+            chunks = splitter.split(cleaned_pages)
 
-        # STEP 4 : EMBEDDINGS
+            logger.info(f"Chunks Created : {len(chunks)}")
 
-        print("[4] Creating Embeddings...")
+            # ---------------------------
+            # STEP 4 : EMBEDDINGS
+            # ---------------------------
 
-        embeddings = embedder.generate_embeddings(chunks)
+            logger.info("[4] Creating Embeddings...")
 
-        print(f"Embedding Shape : {embeddings.shape}")
+            embeddings = embedder.generate_embeddings(chunks)
 
-        # STEP 5 : STORE
+            logger.info(
+                f"Embedding Shape : {embeddings.shape}"
+            )
 
-        print("[5] Saving into ChromaDB...")
+            # ---------------------------
+            # STEP 5 : STORE
+            # ---------------------------
 
-        vector_db.add_documents(
-            chunks,
-            embeddings,
-            document["source"]
-        )
+            logger.info("[5] Saving into ChromaDB...")
 
-        print("Vector Database Updated!")
+            vector_db.add_documents(
+                chunks,
+                embeddings,
+                document["source"]
+            )
+
+            logger.info("Vector Database Updated!")
+
+            logger.info(
+                f"{document['source']} processed successfully."
+            )
+
+        except Exception:
+
+            logger.exception(
+                f"Failed to process {pdf_file.name}"
+            )
+
+            # Continue with the next PDF
+            continue
 
     # ---------------------------------------------------
     # TEST RETRIEVAL
@@ -100,33 +127,47 @@ if __name__ == "__main__":
     print("Testing Retrieval")
     print("=" * 70)
 
-    retriever = Retriever()
+    try:
 
-    question = "What is Artificial Intelligence?"
+        retriever = Retriever()
 
-    results = retriever.retrieve(question)
+        question = "What is Artificial Intelligence?"
 
-    documents = results["documents"][0]
-    metadatas = results["metadatas"][0]
+        logger.info(
+            f"Running retrieval for question: {question}"
+        )
 
-    print("\nQuestion:")
-    print(question)
+        results = retriever.retrieve(question)
 
-    print("\nTop Retrieved Chunks:\n")
+        documents = results["documents"][0]
+        metadatas = results["metadatas"][0]
 
-    for i, (doc, metadata) in enumerate(
-        zip(documents, metadatas),
-        start=1,
-    ):
+        print("\nQuestion:")
+        print(question)
 
-        print("=" * 60)
-        print(f"Result {i}")
-        print(f"Source : {metadata['source']}")
-        print(f"Page   : {metadata['page']}")
-        print(f"Chunk  : {metadata['chunk_id']}")
-        print("-" * 60)
+        print("\nTop Retrieved Chunks:\n")
 
-        print(doc[:300])
-        print()
+        for i, (doc, metadata) in enumerate(
+            zip(documents, metadatas),
+            start=1,
+        ):
+
+            print("=" * 60)
+            print(f"Result {i}")
+            print(f"Source : {metadata['source']}")
+            print(f"Page   : {metadata['page']}")
+            print(f"Chunk  : {metadata['chunk_id']}")
+            print("-" * 60)
+
+            print(doc[:300])
+            print()
+
+        logger.info("Retrieval test completed successfully.")
+
+    except Exception:
+
+        logger.exception(
+            "Retriever failed."
+        )
 
 

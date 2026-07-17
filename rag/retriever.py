@@ -1,7 +1,7 @@
 from chromadb import PersistentClient
 from sentence_transformers import SentenceTransformer
 
-from config import (
+from rag.config import (
     MODEL_NAME,
     VECTOR_DB_PATH,
     COLLECTION_NAME,
@@ -47,39 +47,3 @@ class Retriever:
         return results
 
 
-# --------------------------------------------------
-# Testing
-# --------------------------------------------------
-
-if __name__ == "__main__":
-
-    retriever = Retriever()
-
-    question = "What is Artificial Intelligence?"
-
-    results = retriever.retrieve(question)
-
-    print("=" * 60)
-    print("Question:")
-    print(question)
-
-    print("\nTop Retrieved Chunks:\n")
-
-    documents = results["documents"][0]
-    metadatas = results["metadatas"][0]
-    distances = results["distances"][0]
-
-    for i, (doc, metadata, distance) in enumerate(
-        zip(documents, metadatas, distances),
-        start=1
-    ):
-
-        print("=" * 60)
-        print(f"Result {i}")
-        print(f"Source   : {metadata['source']}")
-        print(f"Page     : {metadata['page']}")
-        print(f"Chunk ID : {metadata['chunk_id']}")
-        print(f"Distance : {distance:.4f}")
-        print("-" * 60)
-        print(doc[:300])
-        print()

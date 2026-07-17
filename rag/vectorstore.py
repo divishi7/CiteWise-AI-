@@ -1,6 +1,6 @@
 from chromadb import PersistentClient
 
-from config import VECTOR_DB_PATH, COLLECTION_NAME
+from rag.config import VECTOR_DB_PATH, COLLECTION_NAME
 
 
 class VectorStore:
@@ -74,33 +74,3 @@ class VectorStore:
         print(f"{len(chunks)} chunks stored successfully.")
 
 
-# --------------------------------------------------
-# Testing
-# --------------------------------------------------
-
-from loader import PDFLoader
-from cleaner import TextCleaner
-from splitter import DocumentSplitter
-from embeddings import EmbeddingGenerator
-
-if __name__ == "__main__":
-
-    loader = PDFLoader("data/raw_pdfs/ai notes.pdf")
-    document = loader.load()
-
-    cleaner = TextCleaner()
-    cleaned_pages = cleaner.clean(document["pages"])
-
-    splitter = DocumentSplitter()
-    chunks = splitter.split(cleaned_pages)
-
-    embedder = EmbeddingGenerator()
-    embeddings = embedder.generate_embeddings(chunks)
-
-    db = VectorStore()
-
-    db.add_documents(
-        chunks,
-        embeddings,
-        document["source"]
-    )

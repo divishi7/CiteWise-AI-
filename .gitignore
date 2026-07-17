@@ -28,3 +28,4 @@ data/processed/
 .ipynb_checkpoints/
 
 data/raw_pdfs/
+logs/
