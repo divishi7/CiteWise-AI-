@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from rag.vectordb import collection
+
+from rag.retriever import Retriever
 from backend.gemini_service import generate_answer
 
 router = APIRouter()
@@ -13,11 +14,10 @@ class ChatRequest(BaseModel):
 @router.post("/chat")
 async def chat(request: ChatRequest):
 
-    results = collection.query(
-        query_texts=[request.question],
-        n_results=3
-    )
-   
+    retriever = Retriever()
+
+    results = retriever.retrieve(request.question)
+
     if not results["documents"] or not results["documents"][0]:
         return {
             "message": "No relevant information found.",

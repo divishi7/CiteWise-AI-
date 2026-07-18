@@ -9,24 +9,63 @@ from rag.vectorstore import VectorStore
 from rag.retriever import Retriever
 
 
-if __name__ == "__main__":
-
-    print("=" * 70)
-    print("CITEWISE AI - DOCUMENT PROCESSING PIPELINE")
-    print("=" * 70)
-
-    # ---------------------------------------------------
-    # Initialize reusable objects (only once)
-    # ---------------------------------------------------
+def process_pdf(pdf_path: str):
+    """
+    Processes a single PDF and stores it in ChromaDB.
+    """
 
     cleaner = TextCleaner()
     splitter = DocumentSplitter()
     embedder = EmbeddingGenerator()
     vector_db = VectorStore()
 
-    # ---------------------------------------------------
-    # Find all PDFs
-    # ---------------------------------------------------
+    pdf_file = Path(pdf_path)
+
+    logger.info(f"[1] Loading {pdf_file.name}")
+
+    loader = PDFLoader(pdf_file)
+    document = loader.load()
+
+    logger.info(f"Loaded: {document['source']}")
+
+    logger.info(f"Cleaning {document['source']}")
+
+    cleaned_pages = cleaner.clean(document["pages"])
+
+    logger.info(f"Pages Cleaned : {len(cleaned_pages)}")
+
+    logger.info("[3] Splitting Document...")
+
+    chunks = splitter.split(cleaned_pages)
+
+    logger.info(f"Chunks Created : {len(chunks)}")
+
+    logger.info("[4] Creating Embeddings...")
+
+    embeddings = embedder.generate_embeddings(chunks)
+
+    logger.info(f"Embedding Shape : {embeddings.shape}")
+
+    logger.info("[5] Saving into ChromaDB...")
+
+    vector_db.add_documents(
+        chunks,
+        embeddings,
+        document["source"]
+    )
+
+    logger.info("Vector Database Updated!")
+
+    logger.info(
+        f"{document['source']} processed successfully."
+    )
+
+
+if __name__ == "__main__":
+
+    print("=" * 70)
+    print("CITEWISE AI - DOCUMENT PROCESSING PIPELINE")
+    print("=" * 70)
 
     pdf_folder = Path("data/raw_pdfs")
     pdf_files = list(pdf_folder.glob("*.pdf"))
@@ -36,10 +75,6 @@ if __name__ == "__main__":
             "No PDF files found in data/raw_pdfs/"
         )
 
-    # ---------------------------------------------------
-    # Process every PDF
-    # ---------------------------------------------------
-
     for pdf_file in pdf_files:
 
         print("\n" + "=" * 70)
@@ -47,76 +82,12 @@ if __name__ == "__main__":
         print("=" * 70)
 
         try:
-
-            # ---------------------------
-            # STEP 1 : LOAD
-            # ---------------------------
-
-            logger.info(f"[1] Loading {pdf_file.name}")
-
-            loader = PDFLoader(pdf_file)
-
-            document = loader.load()
-
-            logger.info(f"Loaded: {document['source']}")
-
-            # ---------------------------
-            # STEP 2 : CLEAN
-            # ---------------------------
-
-            logger.info(f"Cleaning {document['source']}")
-
-            cleaned_pages = cleaner.clean(document["pages"])
-
-            logger.info(f"Pages Cleaned : {len(cleaned_pages)}")
-
-            # ---------------------------
-            # STEP 3 : SPLIT
-            # ---------------------------
-
-            logger.info("[3] Splitting Document...")
-
-            chunks = splitter.split(cleaned_pages)
-
-            logger.info(f"Chunks Created : {len(chunks)}")
-
-            # ---------------------------
-            # STEP 4 : EMBEDDINGS
-            # ---------------------------
-
-            logger.info("[4] Creating Embeddings...")
-
-            embeddings = embedder.generate_embeddings(chunks)
-
-            logger.info(
-                f"Embedding Shape : {embeddings.shape}"
-            )
-
-            # ---------------------------
-            # STEP 5 : STORE
-            # ---------------------------
-
-            logger.info("[5] Saving into ChromaDB...")
-
-            vector_db.add_documents(
-                chunks,
-                embeddings,
-                document["source"]
-            )
-
-            logger.info("Vector Database Updated!")
-
-            logger.info(
-                f"{document['source']} processed successfully."
-            )
+            process_pdf(str(pdf_file))
 
         except Exception:
-
             logger.exception(
                 f"Failed to process {pdf_file.name}"
             )
-
-            # Continue with the next PDF
             continue
 
     # ---------------------------------------------------
