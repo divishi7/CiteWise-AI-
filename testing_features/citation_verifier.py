@@ -1,3 +1,9 @@
+import re
+from sentence_transformers import CrossEncoder
+
+nli_model = CrossEncoder("cross-encoder/nli-deberta-v3-base")
+LABELS = ["contradiction", "entailment", "neutral"]
+
 #to verify claims
 def verify_claim(chunk, claim):
     """Check if `chunk` supports `claim`. Returns entailment/contradiction/neutral + confidence."""
@@ -18,4 +24,10 @@ def verify_answer(chunks, answer_text):
             if best_result is None or result["confidence"] > best_result["confidence"]:
                 best_result = result
         results.append(best_result)
+    return results
+
+def verify_answer_with_threshold(chunks, answer_text, min_confidence=0.6):
+    results = verify_answer(chunks, answer_text)
+    for r in results:
+        r["reliable"] = r["confidence"] >= min_confidence
     return results
