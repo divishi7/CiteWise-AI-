@@ -10,7 +10,6 @@ pydantic
 sentence-transformers
 chromadb
 langchain-text-splitters
-chromadb
 numpy
 langchain-google-genai
 python-dotenv
