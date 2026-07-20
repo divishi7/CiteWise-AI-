@@ -9,13 +9,9 @@ python-multipart
 pydantic
 sentence-transformers
 chromadb
-react 
-react-dom
-fetch API
 langchain-text-splitters
 chromadb
 numpy
 langchain-google-genai
 python-dotenv
 google-generativeai
-npm install;
