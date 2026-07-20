@@ -3,11 +3,12 @@ from sentence_transformers import CrossEncoder
 
 nli_model = CrossEncoder("cross-encoder/nli-deberta-v3-base")
 LABELS = ["contradiction", "entailment", "neutral"]
+from utils import split_into_claims
 
 #to verify claims
 def verify_claim(chunk, claim):
     """Check if `chunk` supports `claim`. Returns entailment/contradiction/neutral + confidence."""
-    scores = nli_model.predict([(chunk, claim)])
+    scores = nli_model.predict([(chunk, claim)], apply_softmax=True)
     label = LABELS[scores.argmax()]
     confidence = scores.max()
     return {"claim": claim, "chunk": chunk, "label": label, "confidence": confidence}
