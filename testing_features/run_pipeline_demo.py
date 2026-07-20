@@ -1,12 +1,16 @@
+import json
+
 from utils import clean_chunk
 from citation_verifier import verify_answer
 from conflict_detector import detect_conflicts
 from evaluator import citation_accuracy
 
-# 🔧 Replace these two lines with real data from Member 2 and Member 3
-raw_chunks = ["Retrieval-Augmented Generation (RAG) combines a retriever with a generator to reduce hallucination.",
-    "Vector databases store embeddings for fast semantic search."]        # list of strings — from Member 2
-generated_answer = "RAG reduces hallucination by combining retrieval and generation. It uses vector databases for storage."  # one string — from Member 3
+with open("latest_run.json") as f:
+    data = json.load(f)
+
+raw_chunks = data["chunks"]
+generated_answer = data["answer"]
+
 
 chunks = [clean_chunk(c) for c in raw_chunks]
 
