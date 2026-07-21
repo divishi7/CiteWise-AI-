@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter
 from pydantic import BaseModel
 
@@ -44,3 +45,6 @@ async def chat(request: ChatRequest):
         "answer": answer,
         "context": results["documents"][0]
     }
+
+with open("testing_features/latest_run.json", "w") as f:
+    json.dump({"chunks": results["documents"][0], "answer": answer}, f)
