@@ -19,4 +19,5 @@ dependencies = [
     "pymupdf>=1.28.0",
     "pypdf>=6.14.2",
     "transformers>=5.14.1",
+    "langchain-google-genai>=4.2.7",
 ]
