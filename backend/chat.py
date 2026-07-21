@@ -1,4 +1,5 @@
 import json
+import traceback
 from fastapi import APIRouter
 from pydantic import BaseModel
 
@@ -14,37 +15,56 @@ class ChatRequest(BaseModel):
 
 @router.post("/chat")
 async def chat(request: ChatRequest):
-    print("=== /chat endpoint hit ===")
-    print("Question:", request.question)
+    try:
+        print("=== /chat endpoint hit ===")
+        print("Question:", request.question)
 
-    retriever = Retriever()
+        retriever = Retriever()
 
-    results = retriever.retrieve(request.question)
-    print("Retriever output:", results)
+        results = retriever.retrieve(request.question)
+        print("Retriever output:", results)
 
-    if not results["documents"] or not results["documents"][0]:
-        print("No documents found.")
+        if not results["documents"] or not results["documents"][0]:
+            print("No documents found.")
+            return {
+                "message": "No relevant information found.",
+                "results": []
+            }
+
+        context = "\n\n".join(results["documents"][0])
+        print("Context length:", len(context))
+
+        print("Calling Gemini...")
+        answer = generate_answer(
+            context=context,
+            question=request.question
+        )
+
+        print("Gemini answer:", answer)
+
+        # Save the latest run for debugging/testing
+        with open("testing_features/latest_run.json", "w") as f:
+            json.dump(
+                {
+                    "chunks": results["documents"][0],
+                    "answer": answer
+                },
+                f,
+                indent=4
+            )
+
         return {
-            "message": "No relevant information found.",
-            "results": []
+            "message": "Answer generated successfully.",
+            "answer": answer,
+            "context": results["documents"][0]
         }
 
-    context = "\n\n".join(results["documents"][0])
-    print("Context length:", len(context))
+    except Exception as e:
+        print("\n========== ERROR IN /chat ==========")
+        traceback.print_exc()
+        print("====================================\n")
 
-    print("Calling Gemini...")
-    answer = generate_answer(
-        context=context,
-        question=request.question
-    )
-
-    print("Gemini answer:", answer)
-
-    return {
-        "message": "Answer generated successfully.",
-        "answer": answer,
-        "context": results["documents"][0]
-    }
-
-with open("testing_features/latest_run.json", "w") as f:
-    json.dump({"chunks": results["documents"][0], "answer": answer}, f)
+        return {
+            "message": "Error while generating answer.",
+            "error": str(e)
+        }

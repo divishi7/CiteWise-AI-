@@ -15,7 +15,7 @@ if not API_KEY:
     raise ValueError("GOOGLE_API_KEY not found in .env file.")
 
 # Model name
-MODEL = "gemini-3.5-flash"
+MODEL = "gemini-flash-latest"
 
 # Initialize the LLM
 llm = ChatGoogleGenerativeAI(

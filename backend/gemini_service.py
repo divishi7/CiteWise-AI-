@@ -3,10 +3,18 @@ import os
 from dotenv import load_dotenv
 from google import genai
 
+# Load environment variables
 load_dotenv()
 
-API_KEY = os.getenv("GOOGLE_API_KEY")
+# Read API key from .env
+API_KEY = os.getenv("API_KEY")
 
+print("API Key Loaded:", API_KEY is not None)
+
+if not API_KEY:
+    raise ValueError("API_KEY not found in .env file")
+
+# Initialize Gemini client
 client = genai.Client(api_key=API_KEY)
 
 
@@ -27,7 +35,7 @@ Question:
 """
 
     response = client.models.generate_content(
-        model="gemini-3.5-flash",
+        model="gemini-flash-latest",
         contents=prompt,
     )
 
