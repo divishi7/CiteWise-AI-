@@ -1,6 +1,8 @@
 # CiteWise AI
 
 CiteWise AI is an AI-powered research assistant built using Retrieval-Augmented Generation (RAG). It enables users to upload one or multiple PDF documents, retrieve relevant information from the uploaded documents, and generate context-aware answers using Google's Gemini models. The project also includes citation verification and conflict detection modules to evaluate the reliability of generated responses.
+
+
 Active Development Branch: integration
 
 ---
