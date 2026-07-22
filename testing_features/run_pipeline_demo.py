@@ -29,5 +29,5 @@ for c in conflict_results:
     print()
 
 accuracy = citation_accuracy(citation_results)
-print(f"\nCitation accuracy: {accuracy:.1%}")
-print(f"Conflicts detected: {len(conflict_results)}")
+
+print(f"\nCitation accuracy: {citation_accuracy(citation_results):.1%}")

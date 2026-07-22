@@ -1,16 +1,20 @@
 import re
 
-#cleaning of text
 def clean_chunk(text):
-    text = re.sub(r'\s+', ' ', text)           # collapse multiple spaces/newlines into one space
-    text = re.sub(r'\bPage \d+\b', '', text)    # remove things like "Page 3"
+    """Removes extra spaces/newlines and stray page numbers from a text chunk."""
+    text = re.sub(r'\s+', ' ', text)  
+    text = re.sub(r'\bPage \d+\b', '', text)    
     return text.strip()
 
-#remove citation marks
-def remove_citation_markers(text):
-    return re.sub(r'\[\d+\]', '', text)
-    
-#splitting the answers to check
+def clean_markdown(text):
+    """Strips markdown formatting (bullets, bold, headers) that interferes with sentence splitting."""
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)  
+    text = re.sub(r'^\s*[\*\-]\s+', '', text, flags=re.MULTILINE) 
+    text = re.sub(r'\s+', ' ', text)        
+    return text.strip()
+
 def split_into_claims(answer_text):
-    sentences = re.split(r'(?<=[.!?])\s+', answer_text)   # split on sentence-ending punctuation
-    return [s.strip() for s in sentences if s.strip()]
+    """Cleans markdown, then splits a paragraph into a list of individual sentences."""
+    cleaned = clean_markdown(answer_text)
+    sentences = re.split(r'(?<=[.!?])\s+', cleaned)
+    return [s.strip() for s in sentences if s.strip() and len(s.strip()) > 3]
