@@ -27,4 +27,4 @@ COLLECTION_NAME = "citewise_documents"
 # Retrieval
 # ==========================
 
-TOP_K = 3
+TOP_K = 5

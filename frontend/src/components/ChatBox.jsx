@@ -1,37 +1,50 @@
 import "./ChatBox.css";
 import { useState } from "react";
-import AnswerCard from "./AnswerCard";
 
 const API_URL = "http://127.0.0.1:8000";
 
-function ChatBox() {
+function ChatBox({
+  setAnswer,
+  setSources,
+  setCrossAnalysis,
+}) {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
-  const [answer, setAnswer] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (question.trim() === "") return;
 
     setLoading(true);
 
-    fetch(`${API_URL}/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        question: question,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setAnswer(data.answer);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
+    try {
+      const response = await fetch(`${API_URL}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: question,
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch response from backend");
+      }
+
+      const data = await response.json();
+
+      console.log("Backend Response:", data);
+
+      setAnswer(data.answer || "");
+      setSources(data.sources || []);
+      setCrossAnalysis(data.cross_analysis || "");
+
+    } catch (error) {
+      console.error("Chat Error:", error);
+      alert("Failed to generate answer.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,8 +76,6 @@ function ChatBox() {
           {loading ? "Generating..." : "Generate Answer"}
         </button>
       </div>
-
-      {answer && <AnswerCard answer={answer} />}
     </div>
   );
 }

@@ -1,39 +1,53 @@
 import "./UploadCard.css";
 import { useState } from "react";
+
 const API_URL = "http://127.0.0.1:8000";
 
 function UploadCard() {
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [uploaded, setUploaded] = useState(false);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
+    const uploadFiles = (files) => {
 
-        if (file && file.type === "application/pdf") {
-            setSelectedFile(file);
+        setUploading(true);
+        setUploaded(false);
 
-           setUploading(true);
-           setUploaded(false);
+        const formData = new FormData();
 
-           const formData = new FormData();
-           formData.append("file", file);
+        files.forEach((file) => {
+            formData.append("files", file);
+        });
 
-           fetch(`${API_URL}/upload`, {
+        fetch(`${API_URL}/upload`, {
             method: "POST",
             body: formData,
-           })
-           .then((response) => response.json())
-           .then((data) => {
-            setUploading(false);
-            setUploaded(true);
-           })
-           .catch((error) => {
-            console.error(error);
-            setUploading(false);
-           });
-        }
+        })
+            .then((response) => response.json())
+            .then(() => {
+                setUploading(false);
+                setUploaded(true);
+            })
+            .catch((error) => {
+                console.error(error);
+                setUploading(false);
+            });
+    };
+
+    const handleFileChange = (event) => {
+
+        const files = Array.from(event.target.files);
+
+        const pdfFiles = files.filter(
+            (file) => file.type === "application/pdf"
+        );
+
+        if (pdfFiles.length === 0) return;
+
+        setSelectedFiles(pdfFiles);
+
+        uploadFiles(pdfFiles);
     };
 
     const handleDragOver = (event) => {
@@ -49,31 +63,17 @@ function UploadCard() {
         event.preventDefault();
         setIsDragging(false);
 
-        const file = event.dataTransfer.files[0];
+        const files = Array.from(event.dataTransfer.files);
 
-        if (file && file.type === "application/pdf") {
-            setSelectedFile(file);
+        const pdfFiles = files.filter(
+            (file) => file.type === "application/pdf"
+        );
 
-            setUploading(true);
-            setUploaded(false);
+        if (pdfFiles.length === 0) return;
 
-            const formData = new FormData();
-            formData.append("file", file);
+        setSelectedFiles(pdfFiles);
 
-            fetch(`${API_URL}/upload`, {
-                method: "POST",
-                body: formData,
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                setUploading(false);
-                setUploaded(true);
-            })
-            .catch((error) => {
-                console.error(error);
-                setUploading(false);
-            });
-        }
+        uploadFiles(pdfFiles);
     };
 
     return (
@@ -85,40 +85,46 @@ function UploadCard() {
         >
             <div className="upload-icon">📄</div>
 
-            <h2>Upload your PDF</h2>
+            <h2>Upload your PDFs</h2>
 
-            <p>Choose a research paper or report to chat with.</p>
+            <p>Choose one or more research papers to compare.</p>
 
             <p className="small-text">
-                Only PDF files are supported
+                Multiple PDF files are supported
             </p>
 
             <input
                 id="pdfUpload"
                 type="file"
                 accept=".pdf"
+                multiple
                 onChange={handleFileChange}
                 hidden
             />
 
             <label htmlFor="pdfUpload" className="upload-btn">
-                📁 Choose PDF
+                📁 Choose PDFs
             </label>
 
             {uploading && (
                 <p className="uploading">
-                    Uploading...
+                    Uploading PDFs...
                 </p>
             )}
 
             {uploaded && (
                 <>
-                    <p className="filename">
-                        ✅ {selectedFile.name}
-                    </p>
+                    {selectedFiles.map((file, index) => (
+                        <p
+                            key={index}
+                            className="filename"
+                        >
+                            ✅ {file.name}
+                        </p>
+                    ))}
 
                     <p className="success-message">
-                        PDF uploaded successfully!
+                        PDFs uploaded successfully!
                     </p>
                 </>
             )}

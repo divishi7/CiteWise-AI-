@@ -1,10 +1,16 @@
+import { useState } from "react";
 import Navbar from "./Navbar";
 import UploadCard from "./UploadCard";
 import ChatBox from "./ChatBox";
 import CitationPanel from "./CitationPanel";
 import ConflictPanel from "./ConflictPanel";
+import AnswerCard from "./AnswerCard";
 
 function Home() {
+  const [answer, setAnswer] = useState("");
+  const [sources, setSources] = useState([]);
+  const [crossAnalysis, setCrossAnalysis] = useState("");
+
   return (
     <>
       <Navbar />
@@ -28,13 +34,32 @@ function Home() {
           <span>⚖️ Conflict Detection</span>
         </div>
 
+        {/* Upload + Chat Section */}
         <div className="top-section">
           <UploadCard />
-          <ChatBox />
+
+          <ChatBox
+            setAnswer={setAnswer}
+            setSources={setSources}
+            setCrossAnalysis={setCrossAnalysis}
+          />
         </div>
 
-        <CitationPanel />
-        <ConflictPanel />
+        {/* AI Answer */}
+        {answer && (
+          <AnswerCard answer={answer} />
+        )}
+
+        {/* Source Citations */}
+        <CitationPanel
+          sources={sources}
+        />
+
+        {/* Cross Analysis */}
+        <ConflictPanel
+          analysis={crossAnalysis}
+        />
+
       </div>
     </>
   );

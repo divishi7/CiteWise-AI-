@@ -1,34 +1,60 @@
 import os
-
 from dotenv import load_dotenv
-from google import genai
 
 load_dotenv()
 
-API_KEY = os.getenv("GEMINI_API_KEY")
-
-client = genai.Client(api_key=API_KEY)
-
 
 def generate_answer(context: str, question: str):
-    prompt = f"""
-You are an AI assistant for question answering over documents.
 
-Use ONLY the context below to answer the user's question.
+    if not context or context.strip() == "":
+        return "I couldn't find the answer in the uploaded documents."
 
-If the answer is not present in the context, reply:
-"I couldn't find the answer in the uploaded document."
+    context = context.strip()
 
-Context:
+    if len(context) > 1800:
+        context = context[:1800] + "..."
+
+    return f"""Based on the uploaded documents:
+
 {context}
-
-Question:
-{question}
 """
 
-    response = client.models.generate_content(
-        model="gemini-flash-latest",
-        contents=prompt,
+
+def generate_cross_analysis(grouped_context):
+
+    if len(grouped_context) < 2:
+        return (
+            "Only one document contributed to the retrieved answer."
+        )
+
+    output = "Comparison of uploaded documents:\n\n"
+
+    for source, chunks in grouped_context.items():
+
+        output += f"📄 {source}\n"
+
+        pages = sorted(
+            list(
+                {
+                    chunk["page"]
+                    for chunk in chunks
+                }
+            )
+        )
+
+        output += f"Relevant Pages: {pages}\n"
+
+        preview = ""
+
+        for chunk in chunks:
+            preview += chunk["text"][:150] + " "
+
+        output += preview[:350]
+        output += "\n\n"
+
+    output += (
+        "\nConclusion:\n"
+        "The retrieved information above comes directly from the uploaded PDFs."
     )
 
-    return response.text
+    return output
