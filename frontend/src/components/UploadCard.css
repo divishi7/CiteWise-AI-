@@ -1,128 +1,214 @@
-.upload-card {
-    width: 100%;
-    max-width: 600px;
-    min-width: 360px;
-    min-height: 400px;
+.upload-card{
+    width:100%;
+    max-width:620px;
+    min-width:360px;
+    min-height:430px;
 
-    margin: 40px auto;
-    padding: 40px 35px;
+    margin:40px auto;
+    padding:45px 40px;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 
-    background: white;
+    background:rgba(255,255,255,.97);
 
-    border: 1px solid #e5e7eb;
-    border-radius: 24px;
+    border:1px solid rgba(255,255,255,.4);
 
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    border-radius:28px;
 
-    text-align: center;
+    box-shadow:
+    0 25px 60px rgba(15,23,42,.22);
 
-    transition: all 0.35s ease;
+    transition:.35s ease;
+
+    position:relative;
+
+    overflow:hidden;
+
+    text-align:center;
 }
 
-.upload-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+.upload-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:6px;
+
+    background:linear-gradient(90deg,#2563eb,#4f46e5,#3b82f6);
+
 }
 
-.upload-icon {
-    font-size: 80px;
-    margin-bottom: 20px;
+.upload-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 35px 70px rgba(37,99,235,.28);
+
 }
 
-.upload-card h2 {
-    margin-bottom: 15px;
-    color: #111827;
-    font-size: 38px;
+.upload-icon{
+
+    font-size:82px;
+
+    margin-bottom:20px;
+
+    filter:drop-shadow(0 8px 16px rgba(37,99,235,.25));
+
 }
 
-.upload-card p {
-    color: #6b7280;
-    font-size: 17px;
-    line-height: 1.6;
-    margin-bottom: 12px;
+.upload-card h2{
+
+    font-size:42px;
+
+    color:#0f172a;
+
+    margin-bottom:18px;
+
+    font-weight:800;
+
 }
 
-.small-text {
-    color: #9ca3af;
-    font-size: 15px;
+.upload-card p{
+
+    color:#64748b;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+    margin-bottom:10px;
+
 }
 
-.upload-card input {
-    margin-top: 20px;
+.small-text{
+
+    color:#94a3b8;
+
+    font-size:15px;
+
+    margin-bottom:15px;
+
 }
 
-.upload-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+.upload-card input{
 
-    margin-top: 20px;
+    display:none;
 
-    padding: 15px 34px;
-
-    background: #2563eb;
-    color: white;
-
-    border: none;
-    border-radius: 12px;
-
-    cursor: pointer;
-
-    font-size: 16px;
-    font-weight: 600;
-
-    transition: all 0.3s ease;
 }
 
-.upload-btn:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px);
+.upload-btn{
+
+    margin-top:25px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:16px 36px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:
+    0 12px 30px rgba(37,99,235,.35);
+
 }
 
-.filename {
-    margin-top: 18px;
-    color: #16a34a;
-    font-weight: 600;
-    font-size: 16px;
+.upload-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 20px 40px rgba(37,99,235,.45);
+
 }
 
-.uploading {
-    margin-top: 18px;
-    color: #2563eb;
-    font-weight: 600;
-    animation: blink 1s infinite;
+.filename{
+
+    margin-top:18px;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    padding:10px 18px;
+
+    border-radius:999px;
+
+    font-weight:600;
+
 }
 
-.success-message {
-    margin-top: 8px;
-    color: #16a34a;
-    font-size: 15px;
-    font-weight: 500;
+.uploading{
+
+    margin-top:18px;
+
+    color:#2563eb;
+
+    font-weight:700;
+
+    animation:blink 1s infinite;
+
 }
 
-.dragging {
-    border: 3px dashed #2563eb;
-    background: #eef5ff;
-    transform: scale(1.02);
-    transition: all 0.3s ease;
+.success-message{
+
+    margin-top:12px;
+
+    color:#16a34a;
+
+    font-weight:600;
+
 }
 
-@keyframes blink {
-    0% {
-        opacity: 0.3;
+.dragging{
+
+    border:3px dashed #3b82f6;
+
+    background:#eff6ff;
+
+    transform:scale(1.02);
+
+}
+
+@keyframes blink{
+
+    0%{
+        opacity:.3;
     }
 
-    50% {
-        opacity: 1;
+    50%{
+        opacity:1;
     }
 
-    100% {
-        opacity: 0.3;
+    100%{
+        opacity:.3;
     }
+
 }

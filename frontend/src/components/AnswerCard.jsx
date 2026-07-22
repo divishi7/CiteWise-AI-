@@ -1,7 +1,7 @@
 import "./AnswerCard.css";
 import { useState } from "react";
 
-function AnswerCard({ answer }) {
+function AnswerCard({ answer, sources }) {
   const [copied, setCopied] = useState(false);
 
 

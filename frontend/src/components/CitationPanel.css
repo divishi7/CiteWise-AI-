@@ -1,58 +1,94 @@
-.citation-panel {
+.citation-panel{
 
-    width: 100%;
-    max-width: 900px;
+    width:100%;
+    max-width:1100px;
 
-    margin: 40px auto;
+    margin:45px auto;
 
-    padding: 40px;
+    padding:45px;
 
-    background: white;
+    background:rgba(255,255,255,.98);
 
-    border: 1px solid #e5e7eb;
-    border-radius: 24px;
+    border:1px solid rgba(255,255,255,.4);
 
-    box-shadow: 0 15px 40px rgba(0,0,0,.08);
+    border-radius:28px;
+
+    box-shadow:
+    0 25px 60px rgba(15,23,42,.22);
+
+    position:relative;
+
+    overflow:hidden;
+
+    transition:.35s;
+
+}
+
+.citation-panel::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:6px;
+
+    background:linear-gradient(90deg,#2563eb,#4f46e5,#3b82f6);
+
+}
+
+.citation-panel:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 35px 70px rgba(37,99,235,.28);
 
 }
 
 .citation-panel h2{
 
-    color:#111827;
-
-    font-size:34px;
-
-    margin-bottom:30px;
-
     text-align:center;
+
+    font-size:38px;
+
+    font-weight:800;
+
+    color:#0f172a;
+
+    margin-bottom:35px;
 
 }
 
 .citation-card{
 
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-left:6px solid #2563eb;
+
+    border-radius:18px;
+
     padding:24px;
 
-    border:1px solid #e5e7eb;
-
-    border-left:5px solid #2563eb;
-
-    border-radius:16px;
-
-    margin-bottom:20px;
+    margin-bottom:22px;
 
     transition:.3s;
-
-    background:#fafcff;
 
 }
 
 .citation-card:hover{
 
-    transform:translateY(-4px);
-
-    box-shadow:0 12px 28px rgba(0,0,0,.08);
-
     background:white;
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 15px 35px rgba(15,23,42,.10);
 
 }
 
@@ -64,35 +100,39 @@
 
     align-items:center;
 
+    flex-wrap:wrap;
+
+    gap:12px;
+
     margin-bottom:18px;
 
 }
 
 .page-badge{
 
-    background:#2563eb;
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
 
     color:white;
 
-    padding:8px 16px;
+    padding:9px 18px;
 
     border-radius:999px;
 
     font-size:14px;
 
-    font-weight:600;
+    font-weight:700;
 
 }
 
 .match-badge{
 
-    padding:8px 14px;
+    padding:9px 16px;
 
     border-radius:999px;
 
     font-size:13px;
 
-    font-weight:600;
+    font-weight:700;
 
 }
 
@@ -100,7 +140,7 @@
 
     background:#dcfce7;
 
-    color:#15803d;
+    color:#166534;
 
 }
 
@@ -108,18 +148,50 @@
 
     background:#fef3c7;
 
-    color:#b45309;
+    color:#92400e;
+
+}
+
+.low{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
 
 }
 
 .citation-card p{
 
-    color:#374151;
-
-    line-height:1.8;
+    color:#334155;
 
     font-size:17px;
 
+    line-height:1.9;
+
     margin:0;
+
+}
+
+@media(max-width:768px){
+
+    .citation-panel{
+
+        padding:30px;
+
+    }
+
+    .citation-panel h2{
+
+        font-size:30px;
+
+    }
+
+    .citation-top{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
 
 }
