@@ -69,6 +69,11 @@ async def chat(request: ChatRequest):
     else:
         cross_analysis = "Only one document contributed."
 
+    import json
+
+    with open("testing_features/latest_run.json", "w") as f:
+        json.dump({"chunks": documents, "answer": answer}, f)
+
     return {
         "message": "Answer generated successfully.",
         "answer": answer,
